@@ -1,4 +1,4 @@
-const {src, dest, parallel, series, watch} = require('gulp');
+const { src, dest, parallel, series, watch } = require('gulp');
 const autoprefixer = require('gulp-autoprefixer');
 const cleanCSS = require('gulp-clean-css');
 const uglify = require('gulp-uglify-es').default;
@@ -42,7 +42,7 @@ const resources = () => {
 }
 
 const imgToApp = () => {
-	return src(['./src/img/**.jpg', './src/img/**.png', './src/img/**.jpeg', './src/img/*.svg'])
+  return src(['./src/img/**.jpg', './src/img/**.png', './src/img/**.jpeg', './src/img/*.svg'])
     .pipe(dest('./app/img'))
 }
 
@@ -104,8 +104,6 @@ const checkWeight = (fontname) => {
   return weight;
 }
 
-const cb = () => {}
-
 let srcFonts = './src/scss/_fonts.scss';
 let appFonts = './app/fonts/';
 
@@ -117,13 +115,13 @@ const fontsStyle = (done) => {
     if (items) {
       let c_fontname;
       for (var i = 0; i < items.length; i++) {
-				let fontname = items[i].split('.');
-				fontname = fontname[0];
+        let fontname = items[i].split('.');
+        fontname = fontname[0];
         let font = fontname.split('-')[0];
         let weight = checkWeight(fontname);
 
         if (c_fontname != fontname) {
-          fs.appendFile(srcFonts, '@include font-face("' + font + '", "' + fontname + '", ' + weight +');\r\n', cb);
+          fs.appendFile(srcFonts, '@include font-face("' + font + '", "' + fontname + '", ' + weight + ');\r\n', cb);
         }
         c_fontname = fontname;
       }
@@ -155,26 +153,24 @@ const styles = () => {
 
 const scripts = () => {
   return src('./src/js/main.js')
-    .pipe(webpackStream(
-      {
-        mode: 'development',
-        output: {
-          filename: 'main.js',
-        },
-        module: {
-          rules: [{
-            test: /\.m?js$/,
-            exclude: /(node_modules|bower_components)/,
-            use: {
-              loader: 'babel-loader',
-              options: {
-                presets: ['@babel/preset-env']
-              }
+    .pipe(webpackStream({
+      mode: 'development',
+      output: {
+        filename: 'main.js',
+      },
+      module: {
+        rules: [{
+          test: /\.m?js$/,
+          exclude: /(node_modules|bower_components)/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env']
             }
-          }]
-        },
-      }
-    ))
+          }
+        }]
+      },
+    }))
     .on('error', function (err) {
       console.error('WEBPACK ERROR', err);
       this.emit('end'); // Don't stop the rest of the task
@@ -208,7 +204,7 @@ const watchFiles = () => {
 }
 
 const clean = () => {
-	return del(['app/*'])
+  return del(['app/*'])
 }
 
 exports.fileinclude = htmlInclude;
@@ -254,35 +250,36 @@ const scriptsBuild = () => {
   return src('./src/js/main.js')
     .pipe(webpackStream(
 
-        {
-          mode: 'development',
-          output: {
-            filename: 'main.js',
-          },
-          module: {
-            rules: [{
-              test: /\.m?js$/,
-              exclude: /(node_modules|bower_components)/,
-              use: {
-                loader: 'babel-loader',
-                options: {
-                  presets: ['@babel/preset-env']
-                }
+      {
+        mode: 'development',
+        output: {
+          filename: 'main.js',
+        },
+        module: {
+          rules: [{
+            test: /\.m?js$/,
+            exclude: /(node_modules|bower_components)/,
+            use: {
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env']
               }
-            }]
-          },
-        }))
-      .on('error', function (err) {
-        console.error('WEBPACK ERROR', err);
-        this.emit('end'); // Don't stop the rest of the task
-      })
+            }
+          }]
+        },
+      }))
+    .on('error', function (err) {
+      console.error('WEBPACK ERROR', err);
+      this.emit('end'); // Don't stop the rest of the task
+    })
     .pipe(uglify().on("error", notify.onError()))
     .pipe(dest('./app/js'))
 }
 
 const cache = () => {
   return src('app/**/*.{css,js,svg,png,jpg,jpeg,woff2}', {
-    base: 'app'})
+      base: 'app'
+    })
     .pipe(rev())
     .pipe(revdel())
     .pipe(dest('app'))
@@ -301,11 +298,11 @@ const rewrite = () => {
 }
 
 const htmlMinify = () => {
-	return src('app/**/*.html')
-		.pipe(htmlmin({
-			collapseWhitespace: true
-		}))
-		.pipe(dest('app'));
+  return src('app/**/*.html')
+    .pipe(htmlmin({
+      collapseWhitespace: true
+    }))
+    .pipe(dest('app'));
 }
 
 exports.cache = series(cache, rewrite);
