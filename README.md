@@ -1,2 +1,2 @@
 # zonex-online-store
-Верстка по макету из Figma. HTML/SCSS/JS + Gulp
+Верстка по макету из Photoshop, с использованием Avocode. HTML/SCSS/JS + сборщик Gulp
